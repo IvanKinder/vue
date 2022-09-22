@@ -10,7 +10,7 @@
         @add-payment="addPayment"
         :categoryList="getCategoryList"
       />
-      <PaymentsDisplay :paymentsList="getPaymentsList"/>
+      <PaymentsDisplay :paymentsList="getPaymentsList" :pagesCount="getPagesCount"/>
     </main>
   </div>
 </template>
@@ -27,7 +27,7 @@ export default {
     AddPaymentForm
   },
   computed: {
-    ...mapGetters(['getPaymentsList', 'getCategoryList'])
+    ...mapGetters(['getPaymentsList', 'getCategoryList', 'getPagesCount'])
   },
   methods: {
     ...mapActions(['fetchPaymentsData', 'fetchCategoryData', 'addNewPayment']),

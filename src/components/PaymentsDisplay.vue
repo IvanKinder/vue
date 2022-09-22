@@ -12,10 +12,19 @@
         <span class="value">{{ payment.value }}</span>
       </div>
     </div>
+    <div class="pagination">
+      <button
+        v-for="page in pages"
+        :key="page"
+        @click="selectPage(page)"
+      >{{ page }}</button>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'PaymentsDisplay',
   props: {
@@ -23,6 +32,25 @@ export default {
       type: Array,
       default: () => ([]),
       required: false
+    },
+    pagesCount: {
+      type: Number,
+      default: () => 1
+    }
+  },
+  computed: {
+    pages () {
+      const pages = []
+      for (let i = 0; i < this.pagesCount; i++) {
+        pages.push(i + 1)
+      }
+      return pages
+    }
+  },
+  methods: {
+    ...mapActions(['fetchPageData']),
+    selectPage (page) {
+      this.fetchPageData(page)
     }
   }
 }
