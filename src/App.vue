@@ -6,8 +6,11 @@
       </div>
     </header>
     <main>
-      <AddPaymentForm @add-payment="addPayment"/>
-      <PaymentsDisplay :paymentsList="paymentsList"/>
+      <AddPaymentForm
+        @add-payment="addPayment"
+        :categoryList="getCategoryList"
+      />
+      <PaymentsDisplay :paymentsList="getPaymentsList"/>
     </main>
   </div>
 </template>
@@ -15,6 +18,7 @@
 <script>
 import PaymentsDisplay from './components/PaymentsDisplay.vue'
 import AddPaymentForm from './components/AddPaymentForm.vue'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'App',
@@ -22,35 +26,23 @@ export default {
     PaymentsDisplay,
     AddPaymentForm
   },
-  data: () => ({
-    paymentsList: []
-  }),
+  computed: {
+    ...mapGetters(['getPaymentsList', 'getCategoryList'])
+  },
   methods: {
-    fetchPaymentsData() {
-      return [
-        {
-          date: '28.03.2020',
-          category: 'Food',
-          value: 169
-        },
-        {
-          date: '24.03.2020',
-          category: 'Transport',
-          value: 360
-        },
-        {
-          date: '28.03.2020',
-          category: 'Food',
-          value: 532
-        }
-      ]
-    },
-    addPayment(data) {
-      this.paymentsList.push(data)
+    ...mapActions(['fetchPaymentsData', 'fetchCategoryData', 'addNewPayment']),
+    addPayment (data) {
+      this.addNewPayment(data)
     }
   },
-  created() {
-    this.paymentsList = this.fetchPaymentsData()
+  created () {
+    this.fetchPaymentsData()
+    this.fetchCategoryData()
+    this.$store.commit('EDIT_PAYMENT_DATA', {
+      date: '24.03.2020',
+      category: 'Transport',
+      value: 111
+    })
   }
 }
 </script>

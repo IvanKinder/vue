@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: "PaymentsDisplay",
+  name: 'PaymentsDisplay',
   props: {
     paymentsList: {
       type: Array,

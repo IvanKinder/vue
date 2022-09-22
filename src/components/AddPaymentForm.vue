@@ -3,7 +3,15 @@
     <button @click="showForm">{{ formVisible }}</button>
     <div class="add-payment-form" v-show="show">
       <input type="text" placeholder="Amount" v-model="value">
-      <input type="text" placeholder="Type" v-model="category">
+      <!--      <input type="text" placeholder="Type" v-model="category">-->
+      <select v-model="category">
+        <option disabled selected value="">Please select value</option>
+        <option
+          v-for="(category, index) in categoryList"
+          :key="index"
+          :value="category"
+        >{{ category }}</option>
+      </select>
       <input type="text" placeholder="Date" v-model="date">
       <button @click="addPayment">Add</button>
     </div>
@@ -12,7 +20,13 @@
 
 <script>
 export default {
-  name: "AddPaymentForm",
+  name: 'AddPaymentForm',
+  props: {
+    categoryList: {
+      type: Array,
+      default: () => []
+    }
+  },
   data: () => ({
     value: '',
     category: '',
@@ -21,23 +35,23 @@ export default {
     show: false
   }),
   methods: {
-    addPayment() {
-      const {value, category, date, currentDate} = this
+    addPayment () {
+      const { value, category, date, currentDate } = this
       const data = {
-        date: date ? date : currentDate,
+        date: date || currentDate,
         category,
         value
       }
 
       this.$emit('add-payment', data)
     },
-    showForm() {
+    showForm () {
       this.show = !this.show
       this.formVisible = this.show ? 'Hide form' : 'Add new cost +'
     }
   },
   computed: {
-    currentDate() {
+    currentDate () {
       const currentDate = new Date()
       const currentDay = currentDate.getDate()
       const currentMonth = currentDate.getMonth() + 1
@@ -66,6 +80,14 @@ input {
   border: 1px solid #ccc;
   border-radius: 1px;
   padding-left: 12px;
+}
+
+select {
+  height: 34px;
+  border: 1px solid #ccc;
+  border-radius: 1px;
+  padding-left: 8px;
+  color: #757575
 }
 
 button {
