@@ -1,40 +1,14 @@
 <template>
   <div id="app">
-    <header>
-      <div class="header">
-        My Personal costs
-      </div>
-    </header>
     <main>
-      <AddPaymentForm
-        @add-payment="addPayment"
-        :categoryList="getCategoryList"
-      />
-      <PaymentsDisplay :paymentsList="getPaymentsList" :pagesCount="getPagesCount"/>
     </main>
   </div>
 </template>
 
 <script>
-import PaymentsDisplay from './components/PaymentsDisplay.vue'
-import AddPaymentForm from './components/AddPaymentForm.vue'
-import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'App',
-  components: {
-    PaymentsDisplay,
-    AddPaymentForm
-  },
-  computed: {
-    ...mapGetters(['getPaymentsList', 'getCategoryList', 'getPagesCount'])
-  },
-  methods: {
-    ...mapActions(['fetchPaymentsData', 'fetchCategoryData', 'addNewPayment']),
-    addPayment (data) {
-      this.addNewPayment(data)
-    }
-  },
   created () {
     this.fetchPaymentsData()
     this.fetchCategoryData()
