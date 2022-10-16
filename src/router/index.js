@@ -1,29 +1,60 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import DashBoard from '@/views/DashBoard'
+import About from '@/views/About'
+import NotFound from '@/views/NotFound'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView
+    path: '/dashboard',
+    name: 'dashboard',
+    component: DashBoard,
+    props: { showAddForm: true }
   },
   {
-    path: '/about',
+    path: '/about*',
     name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    component: About
+  },
+  {
+    path: '/add/payment/:category',
+    name: 'addpayment',
+    redirect: to => {
+      return { name: 'dashboard', query: { curCategory: to.params.category, showAddForm: true } }
+    }
+  },
+  {
+    path: '/notfound',
+    name: 'notfound',
+    component: NotFound
+  },
+  {
+    path: '*',
+    redirect: {
+      name: 'notfound'
+    }
   }
 ]
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
   routes
+})
+
+const titles = {
+  dashboard: 'Dashboard',
+  about: 'About',
+  addPayment: 'Add Payment',
+  notfound: 'Not Found'
+}
+
+router.afterEach((to, from) => {
+  document.title = titles[to.name]
+  if (from.name === null && to.redirectedFrom) {
+    to.query.curValue = to.redirectedFrom.split('?value=')[1]
+  }
 })
 
 export default router

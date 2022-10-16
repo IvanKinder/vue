@@ -1,9 +1,9 @@
 <template>
   <div class="form-container">
-    <button @click="showForm">{{ formVisible }}</button>
-    <div class="add-payment-form" v-show="show">
+    <button @click="showForm" v-show="!showAddForm">{{ formVisible }}</button>
+    <div class="add-payment-form"
+         v-show="show || showAddForm">
       <input type="text" placeholder="Amount" v-model="value">
-      <!--      <input type="text" placeholder="Type" v-model="category">-->
       <select v-model="category">
         <option disabled selected value="">Please select value</option>
         <option
@@ -25,6 +25,18 @@ export default {
     categoryList: {
       type: Array,
       default: () => []
+    },
+    showAddForm: {
+      type: Boolean,
+      default: false
+    },
+    curValue: {
+      type: Number,
+      default: 0
+    },
+    curCategory: {
+      type: String,
+      default: 'Food'
     }
   },
   data: () => ({
@@ -42,7 +54,6 @@ export default {
         category,
         value
       }
-
       this.$emit('add-payment', data)
     },
     showForm () {
@@ -58,6 +69,14 @@ export default {
       const currentYear = currentDate.getFullYear()
 
       return `${currentDay}.${currentMonth}.${currentYear}`
+    }
+  },
+  mounted () {
+    if (this.$route.query.curValue) {
+      this.value = this.$route.query.curValue
+    }
+    if (this.$route.query.curCategory) {
+      this.category = this.$route.query.curCategory
     }
   }
 }
